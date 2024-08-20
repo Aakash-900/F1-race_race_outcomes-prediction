@@ -4,7 +4,7 @@ import pandas as pd
 import pickle 
 import base64
 
-# Load the saved model and scaler
+Load the saved model and scaler
 best_model = pickle.load(open('pickle/nn_model.pkl', 'rb'))
 scaler = pickle.load(open('pickle/scaler.pkl', 'rb'))
 
