@@ -117,6 +117,7 @@
 import streamlit as st
 import pandas as pd
 import pickle 
+import base64
 
 # Load the saved model and scaler
 best_model = pickle.load(open('pickle/nn_model.pkl', 'rb'))
@@ -159,20 +160,24 @@ qualifying_position = st.selectbox("Select driver's qualifying position: ", qual
 if driver_name != 'Select driver':
     driver_name_encoded = le_d.transform([driver_name])[0]
 else:
+    driver_name_encoded = None
     st.error("Please select a valid driver name")
-    
+
 if constructor_name != 'Select constructor':
     constructor_name_encoded = le_c.transform([constructor_name])[0]
 else:
+    constructor_name_encoded = None
     st.error("Please select a valid constructor name")
-    
+
 if gp_name != 'Select circuit':
     gp_name_encoded = le_gp.transform([gp_name])[0]
 else:
+    gp_name_encoded = None
     st.error("Please select a valid circuit name")
 
+# Proceed with prediction only if all inputs are valid
 if st.button("Predict"):
-    if driver_name != 'Select driver' and constructor_name != 'Select constructor' and gp_name != 'Select circuit' and season != 'Select season':
+    if driver_name_encoded is not None and constructor_name_encoded is not None and gp_name_encoded is not None and season != 'Select season':
         # Create a new dataframe for prediction
         data = pd.DataFrame({
             'GP_name': [gp_name_encoded],
@@ -234,6 +239,4 @@ if st.button("Predict"):
 
     else:
         st.error("Please fill out all the required fields.")
-
-
 
